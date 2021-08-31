@@ -11,14 +11,12 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Home",
-  components: {
-  },
+  components: {},
 });
 </script>
 
 <style lang="scss">
-  *{
+* {
   text-align: center;
-
-  }
+}
 </style>

@@ -6,28 +6,32 @@ import store from "./store";
 
 /* APOLLO */
 
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+} from "@apollo/client/core";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: 'http://localhost:3000/graphql',
-})
+  uri: "http://localhost:3000/graphql",
+});
 
 // Cache implementation
-const cache = new InMemoryCache()
+const cache = new InMemoryCache();
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
   link: httpLink,
   cache,
-})
+});
 
-import { createApolloProvider } from '@vue/apollo-option'
+import { createApolloProvider } from "@vue/apollo-option";
 
 const apolloProvider = createApolloProvider({
-    defaultClient: apolloClient,
-  })
+  defaultClient: apolloClient,
+});
 
 /* APOLLO */
 
