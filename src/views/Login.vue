@@ -42,6 +42,9 @@
                 const APIurl = "";
                 await fetch(APIurl, {
                     method: "POST",
+                    headers: {
+                        "Content-Type": "applications/json"
+                    },
                     body: JSON.stringify({mail: mail, password: password})
                 }).then(res => {
                     console.log(res.status);
