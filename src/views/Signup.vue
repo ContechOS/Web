@@ -79,13 +79,15 @@ export default {
       this.requestAPI(name, mail, password);
     },
     async requestAPI(name, mail, password) {
-      // this.$apollo.queries.hello;
+      this.$apollo.queries.test;
     },
   },
   apollo: {
-    hello: gql`
+    test: gql`
       query {
-        hello
+        test(id: "asas") {
+          id
+        }
       }
     `,
   },
