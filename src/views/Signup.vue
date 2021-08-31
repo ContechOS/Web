@@ -25,13 +25,21 @@
                 </div>
             </div>
         </div>
+        <p>PROVA {{hello}}</p>
     </div>
     
 </template>
 
 <script>
+    import gql from 'graphql-tag'
+
     export default {
         name: "Register",
+        data () {
+            return {
+                hello: '',
+            }
+        },
         methods:  {
             formSubmit() {
                 if(!document.getElementById("agreeCheck").checked){
@@ -44,18 +52,13 @@
                 this.requestAPI(name, mail, password);
             },
             async requestAPI(name, mail, password) {
-                const APIurl = "";
-                await fetch(APIurl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "applications/json"
-                    },
-                    body: JSON.stringify({name:name, mail: mail, password: password})
-                }).then(res => {
-                    console.log(res.status);
-                    console.log(res.body);
-                });
+                // this.$apollo.queries.hello;
             }
+        },
+        apollo: {
+            hello: gql`query {
+                hello
+            }`,
         }
     }
 </script>
