@@ -2,9 +2,9 @@
   <div id="nav">
     <router-link to="/">Home</router-link> <span v-if="!getUser()">| </span>
     <router-link to="/login" v-if="!getUser()">Login</router-link>
-    <span v-if="!userName">| </span>
+    <span v-if="!getUser()">| </span>
     <router-link to="/signup" v-if="!getUser()">Signup</router-link>
-    <span v-if="userName">| </span>
+    <span v-if="getUser()">| </span>
     <button @click="signOut" v-if="getUser()">Logout</button>
     <router-view />
   </div>
@@ -16,18 +16,14 @@ import { ActionTypes } from "./store/modules/auth/actions.types";
 
 export default {
   name: "app",
-  data() {
-    return {
-      userName: sessionStorage["userName"],
-      sessionToken: sessionStorage["sessionToken"],
-    };
-  },
   methods: {
     signOut: mapActions([ActionTypes.SIGN_OUT]).SIGN_OUT,
     ...mapGetters(["getUser"]),
   },
   created() {
-    this.$store.dispatch(ActionTypes.FETCH_CURRENT_USER);
+    if (localStorage.getItem("auth.token")) {
+      this.$store.dispatch(ActionTypes.FETCH_CURRENT_USER);
+    }
   },
 };
 </script>
