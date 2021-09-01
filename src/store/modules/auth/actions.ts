@@ -4,7 +4,7 @@ import { Mutations } from "./mutations";
 import { ActionTypes } from "./actions.types";
 import { MutationTypes } from "./mutations.types";
 import { RootState } from "@/store";
-import { provideApolloClient, useMutation } from "@vue/apollo-composable";
+import { provideApolloClient, useMutation, useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 import { apolloClient } from "@/mixins/apollo.mixin";
 
@@ -29,7 +29,7 @@ export interface Actions {
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
-  async [ActionTypes.SIGN_IN]({ commit }, payload) {
+  [ActionTypes.SIGN_IN]({ commit }, payload) {
     provideApolloClient(apolloClient);
 
     const { mutate, onDone, onError } = useMutation(gql`
@@ -48,9 +48,9 @@ export const actions: ActionTree<State, RootState> & Actions = {
     mutate(payload);
 
     onDone((result) => {
-      localStorage.setItem("auth.token", result.data.token);
+      localStorage.setItem("auth.token", result.data.signIn.token);
 
-      commit(MutationTypes.SET_USER, result.data.user);
+      commit(MutationTypes.SET_USER, result.data.signIn.user);
     });
 
     onError((result) => {
@@ -61,46 +61,66 @@ export const actions: ActionTree<State, RootState> & Actions = {
     provideApolloClient(apolloClient);
 
     const { mutate, onDone, onError } = useMutation(gql`
-    mutation ($name: String!, $email: String!, $password: String!) {
-      createUser(createUserInput: {
-        name: $name,
-        email: $email,
-        password: $password
-      }) {}
+      mutation ($name: String!, $email: String!, $password: String!) {
+        createUser(createUserInput: {
+          name: $name,
+          email: $email,
+          password: $password
+        }) {}
 
-      signIn(signInInput: {
-        email: $email,
-        password: $password
-      }) {
-        user {
-          id
-          name
-          email
+        signIn(signInInput: {
+          email: $email,
+          password: $password
+        }) {
+          user {
+            id
+            name
+            email
+          }
+          token
         }
-        token
       }
-    }
     `);
 
     mutate(payload);
 
     onDone((result) => {
-      localStorage.setItem("auth.token", result.data.token);
+      localStorage.setItem("auth.token", result.data.signIn.token);
 
-      commit(MutationTypes.SET_USER, result.data.user);
+      commit(MutationTypes.SET_USER, result.data.signIn.user);
     });
 
     onError((result) => {
       console.log(result.graphQLErrors[0].extensions?.response.message);
     });
   },
-  async [ActionTypes.SIGN_OUT]({ commit }, payload) {
+  [ActionTypes.SIGN_OUT]({ commit }, payload) {
     localStorage.clear();
     sessionStorage.clear();
 
     commit(MutationTypes.SET_USER, undefined);
   },
-  async [ActionTypes.FETCH_CURRENT_USER]({ commit }, payload) {
-    // TODO
+  [ActionTypes.FETCH_CURRENT_USER]({ commit }, payload) {
+    provideApolloClient(apolloClient);
+
+    const { onResult, onError } = useQuery(gql`
+      query {
+        currentUser {
+          id
+          name
+          email
+        }
+      }
+    `, undefined, {
+      
+    });
+
+    onResult((result) => {
+      commit(MutationTypes.SET_USER, result.data.currentUser);
+    });
+
+    onError((result) => {
+      console.log(result.graphQLErrors[0].extensions?.response.message);
+    });
   },
 };

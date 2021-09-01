@@ -1,16 +1,19 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> <span v-if="!userName">| </span>
-    <router-link to="/login" v-if="!userName">Login</router-link>
+    <router-link to="/">Home</router-link> <span v-if="!getUser()">| </span>
+    <router-link to="/login" v-if="!getUser()">Login</router-link>
     <span v-if="!userName">| </span>
-    <router-link to="/signup" v-if="!userName">Signup</router-link>
+    <router-link to="/signup" v-if="!getUser()">Signup</router-link>
     <span v-if="userName">| </span>
-    <a @click="logout" href="/" v-if="userName">Logout</a>
+    <a @click="signOut" href="/" v-if="getUser()">Logout</a>
     <router-view />
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+import { ActionTypes } from './store/modules/auth/actions.types';
+
 export default {
   name: "app",
   data() {
@@ -20,10 +23,11 @@ export default {
     };
   },
   methods: {
-    logout() {
-      sessionStorage.clear();
-      console.log(sessionStorage["username"], sessionStorage["sessionToken"]);
-    },
+    signOut: mapActions([ActionTypes.SIGN_OUT]).SIGN_OUT,
+    ...mapGetters(["getUser"]),
+  },
+  created() {
+    this.$store.dispatch(ActionTypes.FETCH_CURRENT_USER);
   },
 };
 </script>
