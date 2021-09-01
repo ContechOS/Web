@@ -22,6 +22,7 @@
             class="form-control"
             id="passwordInput"
             placeholder="password"
+            minlength="8"
             required
           />
         </div>

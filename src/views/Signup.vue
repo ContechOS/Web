@@ -33,6 +33,7 @@
             class="form-control"
             id="passwordInput"
             placeholder="password"
+            minlength="8"
             required
           />
         </div>
@@ -53,7 +54,7 @@
         </div>
       </div>
     </div>
-    <p>PROVA {{ hello }}</p>
+    <p>PROVA {{name}}</p>
   </div>
 </template>
 
@@ -64,7 +65,8 @@ export default {
   name: "Register",
   data() {
     return {
-      hello: "",
+      name: "",
+      email: "",
     };
   },
   methods: {
@@ -74,23 +76,37 @@ export default {
         return;
       }
       let name = document.getElementById("nameInput").value;
-      let mail = document.getElementById("mailInput").value;
+      let email = document.getElementById("mailInput").value;
       let password = document.getElementById("passwordInput").value;
-      this.requestAPI(name, mail, password);
+      this.requestAPI(name, email, password);
     },
-    async requestAPI(name, mail, password) {
-      this.$apollo.queries.test;
+    async requestAPI(name, email, password) {
+      const QUERY = gql`mutation ($name: String!, $email: String!, $password: String!) {
+                createUser(createUserInput: {
+                  name: $name
+                  email: $email
+                  password: $password
+                }) {
+                    id
+                    email
+                    name
+                }
+            }`;
+      this.$apollo.mutate({
+          mutation: QUERY,
+          variables: {
+              name: name,
+              email: email,
+              password: password 
+      }}).then((data) => {
+        console.log(data)
+        this.name = data["data"]["createUser"]["name"]
+      }).catch((error) => {
+        console.error(error)
+      })
     },
   },
-  apollo: {
-    test: gql`
-      query {
-        test(id: "asas") {
-          id
-        }
-      }
-    `,
-  },
+  apollo: {},
 };
 </script>
 
