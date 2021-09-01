@@ -5,7 +5,7 @@
     <span v-if="!userName">| </span>
     <router-link to="/signup" v-if="!getUser()">Signup</router-link>
     <span v-if="userName">| </span>
-    <a @click="signOut" href="/" v-if="getUser()">Logout</a>
+    <button @click="signOut" v-if="getUser()">Logout</button>
     <router-view />
   </div>
 </template>
