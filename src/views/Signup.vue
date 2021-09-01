@@ -60,76 +60,24 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
+import { ActionTypes } from "@/store/modules/auth/actions.types";
 
 export default {
   name: "Register",
-  data() {
-    return {
-      name: "",
-      email: "",
-    };
-  },
   methods: {
     formSubmit() {
       if (!document.getElementById("agreeCheck").checked) {
         alert("You must agree our terms in order to use our services");
         return;
       }
+
       let name = document.getElementById("nameInput").value;
       let email = document.getElementById("mailInput").value;
       let password = document.getElementById("passwordInput").value;
-      this.requestAPI(name, email, password);
-    },
-    async requestAPI(name, email, password) {
-      const QUERY_SIGN_UP = gql`
-        mutation ($name: String!, $email: String!, $password: String!) {
-          createUser(
-            createUserInput: { name: $name, email: $email, password: $password }
-          ) {
-            id
-            email
-            name
-          }
-          signIn(signInInput: { email: $email, password: $password }) {
-            token
-            user {
-              name
-            }
-          }
-        }
-      `;
-      this.$apollo
-        .mutate({
-          mutation: QUERY_SIGN_UP,
-          variables: {
-            name: name,
-            email: email,
-            password: password,
-          },
-        })
-        .then((data) => {
-          if (data["errors"] || data["data"]["errors"]) {
-            console.log("huston we got a problem");
-            data["errors"].forEach((e) => {
-              console.log(e["extensions"]["response"]["message"][0]);
-            });
-          }
 
-          var sessionToken = data["data"]["signIn"]["token"];
-          var userName = data["data"]["signIn"]["user"]["name"];
-
-          sessionStorage.setItem("sessionToken", sessionToken);
-          sessionStorage.setItem("userName", userName);
-
-          window.location.href = "/";
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      this.$store.dispatch(ActionTypes.SIGN_UP, { name, email, password });
     },
   },
-  apollo: {},
 };
 </script>
 
