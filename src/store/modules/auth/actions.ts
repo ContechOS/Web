@@ -20,8 +20,14 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<State, RootState>, "commit">;
 
 export interface Actions {
-  [ActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: any): Promise<void>;
-  [ActionTypes.SIGN_UP]({ commit }: AugmentedActionContext, payload: any): Promise<void>;
+  [ActionTypes.SIGN_IN](
+    { commit }: AugmentedActionContext,
+    payload: any
+  ): Promise<void>;
+  [ActionTypes.SIGN_UP](
+    { commit }: AugmentedActionContext,
+    payload: any
+  ): Promise<void>;
   [ActionTypes.SIGN_OUT](
     { commit }: AugmentedActionContext,
     payload?: undefined
