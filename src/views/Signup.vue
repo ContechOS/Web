@@ -80,43 +80,44 @@ export default {
       this.requestAPI(name, email, password);
     },
     async requestAPI(name, email, password) {
-      const QUERY_SIGN_UP = gql`mutation ($name: String!, $email: String!, $password: String!) {
-                createUser(createUserInput: {
-                  name: $name
-                  email: $email
-                  password: $password
-                }) {
-                    id
-                    email
-                    name
-                }
-                signIn(signInInput: {
-                  email: $email
-                  password: $password
-                }) {
-                    token
-                    user{
-                      name
-                    }
-                }
-            }`;
-      this.$apollo.mutate({
+      const QUERY_SIGN_UP = gql`
+        mutation ($name: String!, $email: String!, $password: String!) {
+          createUser(
+            createUserInput: { name: $name, email: $email, password: $password }
+          ) {
+            id
+            email
+            name
+          }
+          signIn(signInInput: { email: $email, password: $password }) {
+            token
+            user {
+              name
+            }
+          }
+        }
+      `;
+      this.$apollo
+        .mutate({
           mutation: QUERY_SIGN_UP,
           variables: {
-              name: name,
-              email: email,
-              password: password 
-      }}).then((data) => {
-        var sessionToken = data["data"]["signIn"]["token"];
-        var userName = data["data"]["signIn"]["user"]["name"]
+            name: name,
+            email: email,
+            password: password,
+          },
+        })
+        .then((data) => {
+          var sessionToken = data["data"]["signIn"]["token"];
+          var userName = data["data"]["signIn"]["user"]["name"];
 
-        sessionStorage.setItem('sessionToken', sessionToken)
-        sessionStorage.setItem('userName', userName)
-        
-        this.$router.push("/");
-      }).catch((error) => {
-        console.error(error)
-      })
+          sessionStorage.setItem("sessionToken", sessionToken);
+          sessionStorage.setItem("userName", userName);
+
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   apollo: {},

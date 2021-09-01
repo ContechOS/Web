@@ -1,9 +1,11 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link> <span v-if="!userName">| </span>
-    <router-link to="/login" v-if="!userName">Login</router-link> <span v-if="!userName">| </span>
-    <router-link to="/signup" v-if="!userName">Signup</router-link> <span v-if="userName">| </span>
-    <a @click="logout" href="/" v-if="userName">Logout</a> 
+    <router-link to="/login" v-if="!userName">Login</router-link>
+    <span v-if="!userName">| </span>
+    <router-link to="/signup" v-if="!userName">Signup</router-link>
+    <span v-if="userName">| </span>
+    <a @click="logout" href="/" v-if="userName">Logout</a>
     <router-view />
   </div>
 </template>
@@ -12,17 +14,17 @@
 export default {
   name: "app",
   data() {
-    return{
+    return {
       userName: sessionStorage["userName"],
       sessionToken: sessionStorage["sessionToken"],
-    }
+    };
   },
   methods: {
     logout() {
-      sessionStorage.clear()
-      console.log(sessionStorage["username"], sessionStorage["sessionToken"])
-    }
-  }
+      sessionStorage.clear();
+      console.log(sessionStorage["username"], sessionStorage["sessionToken"]);
+    },
+  },
 };
 </script>
 
