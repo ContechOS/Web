@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { ActionTypes } from './store/modules/auth/actions.types';
+import { mapActions, mapGetters } from "vuex";
+import { ActionTypes } from "./store/modules/auth/actions.types";
 
 export default {
   name: "app",

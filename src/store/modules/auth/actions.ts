@@ -4,7 +4,11 @@ import { Mutations } from "./mutations";
 import { ActionTypes } from "./actions.types";
 import { MutationTypes } from "./mutations.types";
 import { RootState } from "@/store";
-import { provideApolloClient, useMutation, useQuery } from "@vue/apollo-composable";
+import {
+  provideApolloClient,
+  useMutation,
+  useQuery,
+} from "@vue/apollo-composable";
 import gql from "graphql-tag";
 import { apolloClient } from "@/mixins/apollo.mixin";
 
@@ -103,17 +107,19 @@ export const actions: ActionTree<State, RootState> & Actions = {
   [ActionTypes.FETCH_CURRENT_USER]({ commit }, payload) {
     provideApolloClient(apolloClient);
 
-    const { onResult, onError } = useQuery(gql`
-      query {
-        currentUser {
-          id
-          name
-          email
+    const { onResult, onError } = useQuery(
+      gql`
+        query {
+          currentUser {
+            id
+            name
+            email
+          }
         }
-      }
-    `, undefined, {
-      
-    });
+      `,
+      undefined,
+      {}
+    );
 
     onResult((result) => {
       commit(MutationTypes.SET_USER, result.data.currentUser);

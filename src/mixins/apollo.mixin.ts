@@ -1,14 +1,14 @@
 import { createHttpLink, InMemoryCache, ApolloClient } from "@apollo/client";
-import { setContext } from '@apollo/link-context'
+import { setContext } from "@apollo/link-context";
 
 const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem("auth.token");
+  const token = localStorage.getItem("auth.token");
 
-    if (token) {
-      headers = { ...headers, "Authorization": `Bearer ${token}` }
-    }
+  if (token) {
+    headers = { ...headers, Authorization: `Bearer ${token}` };
+  }
 
-    return { headers };
+  return { headers };
 });
 
 const httpLink = createHttpLink({
