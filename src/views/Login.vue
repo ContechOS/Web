@@ -46,21 +46,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ActionTypes } from "@/store/modules/auth/actions.types";
+import { Store } from '@/store';
 
 export default {
   name: "Login",
   methods: {
-    formSubmit() {
-      if (!document.getElementById("agreeCheck").checked) {
+    async formSubmit() {
+      if (!(document.getElementById("agreeCheck") as HTMLInputElement).checked) {
         alert("You must agree our terms in order to use our services");
         return;
       }
-      let email = document.getElementById("mailInput").value;
-      let password = document.getElementById("passwordInput").value;
+      let email = (document.getElementById("mailInput") as HTMLInputElement).value;
+      let password = (document.getElementById("passwordInput") as HTMLInputElement).value;
 
-      this.$store.dispatch(ActionTypes.SIGN_IN, { email, password });
+      await ((this as any).$store as Store).dispatch(ActionTypes.SIGN_IN, { email, password });
+
+      this.$router.push("/");
     },
   },
 };

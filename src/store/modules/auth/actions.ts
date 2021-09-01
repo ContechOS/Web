@@ -20,76 +20,88 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<State, RootState>, "commit">;
 
 export interface Actions {
-  [ActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: any): void;
-  [ActionTypes.SIGN_UP]({ commit }: AugmentedActionContext, payload: any): any;
+  [ActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: any): Promise<void>;
+  [ActionTypes.SIGN_UP]({ commit }: AugmentedActionContext, payload: any): Promise<void>;
   [ActionTypes.SIGN_OUT](
     { commit }: AugmentedActionContext,
     payload?: undefined
-  ): any;
+  ): void;
   [ActionTypes.FETCH_CURRENT_USER](
     { commit }: AugmentedActionContext,
     payload: any
-  ): void;
+  ): Promise<void>;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
   [ActionTypes.SIGN_IN]({ commit }, payload) {
-    provideApolloClient(apolloClient);
+    return new Promise((resolve, reject) => {
+      provideApolloClient(apolloClient);
 
-    const { mutate, onDone, onError } = useMutation(gql`
-      mutation ($email: String!, $password: String!) {
-        signIn(signInInput: { email: $email, password: $password }) {
-          user {
+      const { mutate, onDone, onError } = useMutation(gql`
+        mutation ($email: String!, $password: String!) {
+          signIn(signInInput: { email: $email, password: $password }) {
+            user {
+              id
+              name
+              email
+            }
+            token
+          }
+        }
+      `);
+
+      mutate(payload);
+
+      onDone((result) => {
+        localStorage.setItem("auth.token", result.data.signIn.token);
+
+        commit(MutationTypes.SET_USER, result.data.signIn.user);
+
+        resolve();
+      });
+
+      onError((result) => {
+        console.log(result.graphQLErrors[0].extensions?.response.message);
+
+        reject();
+      });
+    });
+  },
+  [ActionTypes.SIGN_UP]({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      provideApolloClient(apolloClient);
+
+      const { mutate, onDone, onError } = useMutation(gql`
+        mutation ($name: String!, $email: String!, $password: String!) {
+          createUser(
+            createUserInput: { name: $name, email: $email, password: $password }
+          ) {
             id
             name
             email
           }
-          token
+
+          signIn(signInInput: { email: $email, password: $password }) {
+            token
+          }
         }
-      }
-    `);
+      `);
 
-    mutate(payload);
+      mutate(payload);
 
-    onDone((result) => {
-      localStorage.setItem("auth.token", result.data.signIn.token);
+      onDone((result) => {
+        localStorage.setItem("auth.token", result.data.signIn.token);
 
-      commit(MutationTypes.SET_USER, result.data.signIn.user);
-    });
+        commit(MutationTypes.SET_USER, result.data.createUser.user);
 
-    onError((result) => {
-      console.log(result.graphQLErrors[0].extensions?.response.message);
-    });
-  },
-  [ActionTypes.SIGN_UP]({ commit }, payload) {
-    provideApolloClient(apolloClient);
+        resolve();
+      });
 
-    const { mutate, onDone, onError } = useMutation(gql`
-      mutation ($name: String!, $email: String!, $password: String!) {
-        createUser(
-          createUserInput: { name: $name, email: $email, password: $password }
-        ) {
-          id
-          name
-          email
-        }
+      onError((result) => {
+        console.log(result.graphQLErrors[0].extensions?.response.message);
 
-        signIn(signInInput: { email: $email, password: $password }) {
-          token
-        }
-      }
-    `);
-
-    mutate(payload);
-
-    onDone((result) => {
-      localStorage.setItem("auth.token", result.data.signIn.token);
-
-      commit(MutationTypes.SET_USER, result.data.createUser.user);
-    });
-
-    onError((result) => {
-      console.log(result.graphQLErrors[0].extensions?.response.message);
+        reject();
+      });
     });
   },
   [ActionTypes.SIGN_OUT]({ commit }, payload) {
@@ -99,28 +111,34 @@ export const actions: ActionTree<State, RootState> & Actions = {
     commit(MutationTypes.SET_USER, undefined);
   },
   [ActionTypes.FETCH_CURRENT_USER]({ commit }, payload) {
-    provideApolloClient(apolloClient);
+    return new Promise((resolve, reject) => {
+      provideApolloClient(apolloClient);
 
-    const { onResult, onError } = useQuery(
-      gql`
-        query {
-          currentUser {
-            id
-            name
-            email
+      const { onResult, onError } = useQuery(
+        gql`
+          query {
+            currentUser {
+              id
+              name
+              email
+            }
           }
-        }
-      `,
-      undefined,
-      {}
-    );
+        `,
+        undefined,
+        {}
+      );
 
-    onResult((result) => {
-      commit(MutationTypes.SET_USER, result.data.currentUser);
-    });
+      onResult((result) => {
+        commit(MutationTypes.SET_USER, result.data.currentUser);
 
-    onError((result) => {
-      console.log(result.graphQLErrors[0].extensions?.response.message);
+        resolve();
+      });
+
+      onError((result) => {
+        console.log(result.graphQLErrors[0].extensions?.response.message);
+
+        reject();
+      });
     });
   },
 };

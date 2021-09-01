@@ -59,23 +59,26 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ActionTypes } from "@/store/modules/auth/actions.types";
+import { Store } from '@/store';
 
 export default {
   name: "Register",
   methods: {
-    formSubmit() {
-      if (!document.getElementById("agreeCheck").checked) {
+    async formSubmit() {
+      if (!(document.getElementById("agreeCheck") as HTMLInputElement).checked) {
         alert("You must agree our terms in order to use our services");
         return;
       }
 
-      let name = document.getElementById("nameInput").value;
-      let email = document.getElementById("mailInput").value;
-      let password = document.getElementById("passwordInput").value;
+      let name = (document.getElementById("nameInput") as HTMLInputElement).value;
+      let email = (document.getElementById("mailInput") as HTMLInputElement).value;
+      let password = (document.getElementById("passwordInput") as HTMLInputElement).value;
 
-      this.$store.dispatch(ActionTypes.SIGN_UP, { name, email, password });
+      await ((this as any).$store as Store).dispatch(ActionTypes.SIGN_UP, { name, email, password });
+
+      this.$router.push("/");
     },
   },
 };
