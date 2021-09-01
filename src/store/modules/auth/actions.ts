@@ -15,14 +15,8 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<State, RootState>, "commit">;
 
 export interface Actions {
-  [ActionTypes.SIGN_IN](
-    { commit }: AugmentedActionContext,
-    payload: any
-  ): void;
-  [ActionTypes.SIGN_UP](
-    { commit }: AugmentedActionContext,
-    payload: any
-  ): any;
+  [ActionTypes.SIGN_IN]({ commit }: AugmentedActionContext, payload: any): void;
+  [ActionTypes.SIGN_UP]({ commit }: AugmentedActionContext, payload: any): any;
   [ActionTypes.SIGN_OUT](
     { commit }: AugmentedActionContext,
     payload?: undefined
@@ -36,15 +30,12 @@ export interface Actions {
 export const actions: ActionTree<State, RootState> & Actions = {
   async [ActionTypes.SIGN_IN]({ commit }, payload) {
     const { mutate, onDone, onError } = useMutation(gql`
-    mutation ($email: String!, $password: String!) {
-      signIn(signInInput: {
-        email: $email,
-        password: $password
-      }) {
-        user
-        token
+      mutation ($email: String!, $password: String!) {
+        signIn(signInInput: { email: $email, password: $password }) {
+          user
+          token
+        }
       }
-    }
     `);
 
     mutate(payload);
