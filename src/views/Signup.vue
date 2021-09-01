@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <p>PROVA {{name}}</p>
+    <p>PROVA {{ name }}</p>
   </div>
 </template>
 
@@ -81,29 +81,33 @@ export default {
       this.requestAPI(name, email, password);
     },
     async requestAPI(name, email, password) {
-      const QUERY = gql`mutation ($name: String!, $email: String!, $password: String!) {
-                createUser(createUserInput: {
-                  name: $name
-                  email: $email
-                  password: $password
-                }) {
-                    id
-                    email
-                    name
-                }
-            }`;
-      this.$apollo.mutate({
+      const QUERY = gql`
+        mutation ($name: String!, $email: String!, $password: String!) {
+          createUser(
+            createUserInput: { name: $name, email: $email, password: $password }
+          ) {
+            id
+            email
+            name
+          }
+        }
+      `;
+      this.$apollo
+        .mutate({
           mutation: QUERY,
           variables: {
-              name: name,
-              email: email,
-              password: password 
-      }}).then((data) => {
-        console.log(data)
-        this.name = data["data"]["createUser"]["name"]
-      }).catch((error) => {
-        console.error(error)
-      })
+            name: name,
+            email: email,
+            password: password,
+          },
+        })
+        .then((data) => {
+          console.log(data);
+          this.name = data["data"]["createUser"]["name"];
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   apollo: {},
