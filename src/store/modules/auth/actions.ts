@@ -59,6 +59,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
     mutate(payload);
 
     onDone((result) => {
+      localStorage.setItem("auth.token", result.data.token);
+
       commit(MutationTypes.SET_USER, result.data.user);
     });
 
