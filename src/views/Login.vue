@@ -4,43 +4,45 @@
       <i class="fas fa-user-circle fa-5x" id="account-icon"></i>
       <div class="card-body">
         <h5 class="card-title mb-5">Log in</h5>
-        <div class="mb-3">
-          <label for="mailInput" class="form-label">Email address</label>
-          <input
-            type="email"
-            class="form-control"
-            id="mailInput"
-            aria-describedby="emailHelp"
-            placeholder="example@gmail.com"
-            required
-          />
-        </div>
-        <div class="mb-5">
-          <label for="passwordInput" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="passwordInput"
-            placeholder="password"
-            minlength="8"
-            required
-          />
-        </div>
-        <div class="mb-3 form-check">
-          <input
-            type="checkbox"
-            class="form-check-input"
-            id="agreeCheck"
-            checked
-            required
-          />
-          <label class="form-check-label" for="agreeCheck"
-            >I agree to the terms</label
-          >
-        </div>
-        <div class="d-grid gap-2 mb-3">
-          <button class="btn btn-primary" @click="formSubmit">Log in</button>
-        </div>
+        <form @submit.prevent="formSubmit">
+          <div class="mb-3">
+            <label for="mailInput" class="form-label">Email address</label>
+            <input
+              type="email"
+              class="form-control"
+              id="mailInput"
+              aria-describedby="emailHelp"
+              placeholder="example@gmail.com"
+              required
+            />
+          </div>
+          <div class="mb-5">
+            <label for="passwordInput" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="passwordInput"
+              placeholder="password"
+              minlength="8"
+              required
+            />
+          </div>
+          <div class="mb-3 form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="agreeCheck"
+              checked
+              required
+            />
+            <label class="form-check-label" for="agreeCheck"
+              >I agree to the terms</label
+            >
+          </div>
+          <div class="d-grid gap-2 mb-3">
+            <button type="submit" class="btn btn-primary">Log in</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
