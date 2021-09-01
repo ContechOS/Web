@@ -61,28 +61,30 @@ export default {
       this.requestAPI(mail, password);
     },
     async requestAPI(email, password) {
-      const QUERY_SIGN_IN = gql`mutation ($email: String!, $password: String!) {
-                signIn(signInInput: {
-                  email: $email
-                  password: $password
-                }) {
-                    token
-                    user{
-                      name
-                    }
-                }
-            }`;
-      this.$apollo.mutate({
+      const QUERY_SIGN_IN = gql`
+        mutation ($email: String!, $password: String!) {
+          signIn(signInInput: { email: $email, password: $password }) {
+            token
+            user {
+              name
+            }
+          }
+        }
+      `;
+      this.$apollo
+        .mutate({
           mutation: QUERY_SIGN_IN,
           variables: {
-              email: email,
-              password: password 
-      }}).then((data) => {
-        var sessionToken = data["data"]["signIn"]["token"]
-        var userName = data["data"]["signIn"]["user"]["name"]
+            email: email,
+            password: password,
+          },
+        })
+        .then((data) => {
+          var sessionToken = data["data"]["signIn"]["token"];
+          var userName = data["data"]["signIn"]["user"]["name"];
 
-        sessionStorage.setItem('sessionToken', sessionToken); 
-        sessionStorage.setItem('userName', userName); 
+          sessionStorage.setItem("sessionToken", sessionToken);
+          sessionStorage.setItem("userName", userName);
 
         window.location.href = "/";
       }).catch((error) => {
