@@ -47,7 +47,8 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
+import { ActionTypes } from "@/store/modules/auth/actions.types";
+
 export default {
   name: "Login",
   methods: {
@@ -56,41 +57,10 @@ export default {
         alert("You must agree our terms in order to use our services");
         return;
       }
-      let mail = document.getElementById("mailInput").value;
+      let email = document.getElementById("mailInput").value;
       let password = document.getElementById("passwordInput").value;
-      this.requestAPI(mail, password);
-    },
-    async requestAPI(email, password) {
-      const QUERY_SIGN_IN = gql`
-        mutation ($email: String!, $password: String!) {
-          signIn(signInInput: { email: $email, password: $password }) {
-            token
-            user {
-              name
-            }
-          }
-        }
-      `;
-      this.$apollo
-        .mutate({
-          mutation: QUERY_SIGN_IN,
-          variables: {
-            email: email,
-            password: password,
-          },
-        })
-        .then((data) => {
-          var sessionToken = data["data"]["signIn"]["token"];
-          var userName = data["data"]["signIn"]["user"]["name"];
 
-          sessionStorage.setItem("sessionToken", sessionToken);
-          sessionStorage.setItem("userName", userName);
-
-          window.location.href = "/";
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      this.$store.dispatch(ActionTypes.SIGN_IN, { email, password });
     },
   },
 };
