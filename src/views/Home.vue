@@ -4,7 +4,13 @@
     <h1>Homepage</h1>
     <p v-if="getUser()">Welcome {{ getUser().name }}</p>
     <p v-if="!getUser()">You are not logged in yet</p>
-    <router-link to="/app" v-if="getUser()" class="btn btn-outline-dark" id="access-app">Access App</router-link>
+    <router-link
+      to="/app"
+      v-if="getUser()"
+      class="btn btn-outline-dark"
+      id="access-app"
+      >Access App</router-link
+    >
   </div>
 </template>
 
@@ -25,7 +31,7 @@ export default defineComponent({
   text-align: center;
 }
 
-#access-app:hover{
+#access-app:hover {
   color: white;
 }
 </style>
