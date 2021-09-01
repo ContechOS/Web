@@ -17,8 +17,16 @@
         </div>
         <div class="mb-5">
           <label for="passwordInput" class="form-label">Password</label>
-          <i class="far fa-eye" v-if="passwordVisible" @click="hidePassword"></i>
-          <i class="far fa-eye-slash" v-if="!passwordVisible" @click="showPassword"></i>
+          <i
+            class="far fa-eye"
+            v-if="passwordVisible"
+            @click="hidePassword"
+          ></i>
+          <i
+            class="far fa-eye-slash"
+            v-if="!passwordVisible"
+            @click="showPassword"
+          ></i>
           <input
             type="password"
             class="form-control"
@@ -57,8 +65,8 @@ export default defineComponent({
   name: "Login",
   data() {
     return {
-      passwordVisible: false
-    }
+      passwordVisible: false,
+    };
   },
   methods: {
     async formSubmit() {
@@ -68,8 +76,9 @@ export default defineComponent({
         alert("You must agree our terms in order to use our services");
         return;
       }
-      let email = (document.getElementById("mailInput") as HTMLInputElement)
-        .value.toLowerCase();
+      let email = (
+        document.getElementById("mailInput") as HTMLInputElement
+      ).value.toLowerCase();
       let password = (
         document.getElementById("passwordInput") as HTMLInputElement
       ).value;
@@ -82,13 +91,15 @@ export default defineComponent({
       this.$router.push("/");
     },
     showPassword() {
-      (document.getElementById("passwordInput") as HTMLInputElement).type = "text";
+      (document.getElementById("passwordInput") as HTMLInputElement).type =
+        "text";
       this.passwordVisible = true;
     },
     hidePassword() {
-      (document.getElementById("passwordInput") as HTMLInputElement).type = "password";
+      (document.getElementById("passwordInput") as HTMLInputElement).type =
+        "password";
       this.passwordVisible = false;
-    }
+    },
   },
 });
 </script>
@@ -102,7 +113,7 @@ export default defineComponent({
 * {
   margin: 0 auto;
 }
-.far{
+.far {
   margin-left: 10px;
   width: 20px;
 }

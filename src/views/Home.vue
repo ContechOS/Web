@@ -35,7 +35,7 @@ export default defineComponent({
   color: white;
 }
 
-#username{
+#username {
   text-transform: capitalize;
 }
 </style>

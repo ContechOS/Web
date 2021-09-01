@@ -49,12 +49,11 @@ export default {
   }
 }
 
-#log-out{
+#log-out {
   text-decoration: underline;
 }
 
 #log-out:hover {
-   cursor: pointer;
-
+  cursor: pointer;
 }
 </style>
