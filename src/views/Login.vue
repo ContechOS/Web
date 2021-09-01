@@ -49,8 +49,9 @@
 <script lang="ts">
 import { ActionTypes } from "@/store/modules/auth/actions.types";
 import { Store } from "@/store";
+import { defineComponent } from "@vue/runtime-core";
 
-export default {
+export default defineComponent({
   name: "Login",
   methods: {
     async formSubmit() {
@@ -74,7 +75,7 @@ export default {
       this.$router.push("/");
     },
   },
-};
+});
 </script>
 
 <style>
