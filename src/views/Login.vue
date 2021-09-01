@@ -86,10 +86,11 @@ export default {
           sessionStorage.setItem("sessionToken", sessionToken);
           sessionStorage.setItem("userName", userName);
 
-        window.location.href = "/";
-      }).catch((error) => {
-        console.error(error)
-      })
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };

@@ -13,7 +13,7 @@
 <script>
 import gql from "graphql-tag";
 if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-  var sessionToken = sessionStorage["sessionToken"]
+  var sessionToken = sessionStorage["sessionToken"];
   // const QUERY_USER = gql`query {
   //               currentUser() {
   //                   token
@@ -31,8 +31,8 @@ if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
   //       var sessionToken = data["data"]["signIn"]["token"]
   //       var userName = data["data"]["signIn"]["user"]["name"]
 
-  //       sessionStorage.setItem('sessionToken', sessionToken); 
-  //       sessionStorage.setItem('userName', userName); 
+  //       sessionStorage.setItem('sessionToken', sessionToken);
+  //       sessionStorage.setItem('userName', userName);
 
   //       window.location.href = "/";
   //     }).catch((error) => {
@@ -50,17 +50,19 @@ export default {
   },
   methods: {
     logout() {
-      sessionStorage.clear()
-    }
+      sessionStorage.clear();
+    },
   },
   apollo: {
     user: {
-      query: gql`query {
-        currentUser
-      }`,
-      update: data => data.hello
-    }
-  }
+      query: gql`
+        query {
+          currentUser
+        }
+      `,
+      update: (data) => data.hello,
+    },
+  },
 };
 </script>
 

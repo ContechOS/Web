@@ -50,10 +50,12 @@
           >
         </div>
         <div class="d-grid gap-2 mb-3">
-          <button class="btn btn-primary" type="submit" @click="formSubmit">Sign up</button>
+          <button class="btn btn-primary" type="submit" @click="formSubmit">
+            Sign up
+          </button>
         </div>
       </div>
-    </div>    
+    </div>
   </div>
 </template>
 
@@ -101,25 +103,30 @@ export default {
         .mutate({
           mutation: QUERY_SIGN_UP,
           variables: {
-              name: name,
-              email: email,
-              password: password 
-      }}).then((data) => {
-        if(data["errors"] || data["data"]["errors"]){
-          console.log("huston we got a problem")
-          data["errors"].forEach((e)=> {console.log(e["extensions"]["response"]["message"][0])})
-        }
+            name: name,
+            email: email,
+            password: password,
+          },
+        })
+        .then((data) => {
+          if (data["errors"] || data["data"]["errors"]) {
+            console.log("huston we got a problem");
+            data["errors"].forEach((e) => {
+              console.log(e["extensions"]["response"]["message"][0]);
+            });
+          }
 
-        var sessionToken = data["data"]["signIn"]["token"];
-        var userName = data["data"]["signIn"]["user"]["name"]
+          var sessionToken = data["data"]["signIn"]["token"];
+          var userName = data["data"]["signIn"]["user"]["name"];
 
-        sessionStorage.setItem('sessionToken', sessionToken)
-        sessionStorage.setItem('userName', userName)
-        
-        window.location.href = "/";
-      }).catch((error) => {
-        console.log(error)
-      })
+          sessionStorage.setItem("sessionToken", sessionToken);
+          sessionStorage.setItem("userName", userName);
+
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   apollo: {},
