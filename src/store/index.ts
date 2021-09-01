@@ -1,9 +1,5 @@
 import { createStore } from "vuex";
-import {
-  store as auth,
-  AuthStore,
-  State as AuthState,
-} from "./modules/auth";
+import { store as auth, AuthStore, State as AuthState } from "./modules/auth";
 
 export type RootState = {
   auth: AuthState;
