@@ -2,10 +2,17 @@
   <div id="nav">
     <router-link to="/">Home</router-link> <span v-if="!getUser()">| </span>
     <router-link to="/login" v-if="!getUser()">Login</router-link>
+    <<<<<<< HEAD
+    <span v-if="!getUser()"> | </span>
+    <router-link to="/signup" v-if="!getUser()">Signup</router-link>
+    <span v-if="getUser()">| </span>
+    <a @click="signOut" href="/" v-if="getUser()">Logout</a>
+    =======
     <span v-if="!getUser()">| </span>
     <router-link to="/signup" v-if="!getUser()">Signup</router-link>
     <span v-if="getUser()">| </span>
     <button @click="signOut" v-if="getUser()">Logout</button>
+    >>>>>>> eb81ebd6e93f9bc2f42c0293270182fb818949cd
     <router-view />
   </div>
 </template>
