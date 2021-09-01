@@ -4,8 +4,9 @@ import { Mutations } from "./mutations";
 import { ActionTypes } from "./actions.types";
 import { MutationTypes } from "./mutations.types";
 import { RootState } from "@/store";
-import { useMutation } from "@vue/apollo-composable";
+import { provideApolloClient, useMutation } from "@vue/apollo-composable";
 import gql from "graphql-tag";
+import { apolloClient } from "@/mixins/apollo.mixin";
 
 type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
@@ -29,10 +30,16 @@ export interface Actions {
 
 export const actions: ActionTree<State, RootState> & Actions = {
   async [ActionTypes.SIGN_IN]({ commit }, payload) {
+    provideApolloClient(apolloClient);
+
     const { mutate, onDone, onError } = useMutation(gql`
       mutation ($email: String!, $password: String!) {
         signIn(signInInput: { email: $email, password: $password }) {
-          user
+          user {
+            id
+            name
+            email
+          }
           token
         }
       }
@@ -47,10 +54,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
     });
 
     onError((result) => {
-      console.log(result);
+      console.log(result.graphQLErrors[0].extensions?.response.message);
     });
   },
   [ActionTypes.SIGN_UP]({ commit }, payload) {
+    provideApolloClient(apolloClient);
+
     const { mutate, onDone, onError } = useMutation(gql`
     mutation ($name: String!, $email: String!, $password: String!) {
       createUser(createUserInput: {
@@ -63,7 +72,11 @@ export const actions: ActionTree<State, RootState> & Actions = {
         email: $email,
         password: $password
       }) {
-        user
+        user {
+          id
+          name
+          email
+        }
         token
       }
     }
@@ -78,7 +91,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
     });
 
     onError((result) => {
-      console.log(result);
+      console.log(result.graphQLErrors[0].extensions?.response.message);
     });
   },
   async [ActionTypes.SIGN_OUT]({ commit }, payload) {
