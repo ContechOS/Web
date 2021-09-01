@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { ActionTypes } from '@/store/modules/auth/actions.types';
+import { ActionTypes } from "@/store/modules/auth/actions.types";
 
 export default {
   name: "Register",
@@ -74,7 +74,7 @@ export default {
       let name = document.getElementById("nameInput").value;
       let email = document.getElementById("mailInput").value;
       let password = document.getElementById("passwordInput").value;
-      
+
       this.$store.dispatch(ActionTypes.SIGN_UP, { name, email, password });
     },
   },

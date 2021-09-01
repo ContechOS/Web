@@ -66,20 +66,15 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
     const { mutate, onDone, onError } = useMutation(gql`
       mutation ($name: String!, $email: String!, $password: String!) {
-        createUser(createUserInput: {
-          name: $name,
-          email: $email,
-          password: $password
-        }) {
+        createUser(
+          createUserInput: { name: $name, email: $email, password: $password }
+        ) {
           id
           name
           email
         }
 
-        signIn(signInInput: {
-          email: $email,
-          password: $password
-        }) {
+        signIn(signInInput: { email: $email, password: $password }) {
           token
         }
       }
