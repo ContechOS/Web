@@ -68,6 +68,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
       onError((result) => {
         console.log(result.graphQLErrors[0].extensions?.response.message);
+        alert(result.graphQLErrors[0].extensions?.response.message);
 
         reject();
       });
@@ -105,6 +106,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
       onError((result) => {
         console.log(result.graphQLErrors[0].extensions?.response.message);
+        alert(result.graphQLErrors[0].extensions?.response.message);
 
         reject();
       });
@@ -142,6 +144,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
       onError((result) => {
         console.log(result.graphQLErrors[0].extensions?.response.message);
+        alert(result.graphQLErrors[0].extensions?.response.message);
 
         reject();
       });

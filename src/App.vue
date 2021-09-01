@@ -5,7 +5,7 @@
     <span v-if="!getUser()"> | </span>
     <router-link to="/signup" v-if="!getUser()">Signup</router-link>
     <span v-if="getUser()">| </span>
-    <button @click="signOut" href="/" v-if="getUser()">Logout</button>
+    <a @click="signOut" v-if="getUser()" id="log-out">Logout</a>
     <router-view />
   </div>
 </template>
@@ -47,5 +47,14 @@ export default {
       color: #3472cf;
     }
   }
+}
+
+#log-out{
+  text-decoration: underline;
+}
+
+#log-out:hover {
+   cursor: pointer;
+
 }
 </style>
