@@ -54,7 +54,6 @@
         </div>
       </div>
     </div>
-    <p>PROVA {{ name }}</p>
   </div>
 </template>
 
@@ -81,7 +80,7 @@ export default {
       this.requestAPI(name, email, password);
     },
     async requestAPI(name, email, password) {
-      const QUERY = gql`
+      const QUERY_SIGN_UP = gql`
         mutation ($name: String!, $email: String!, $password: String!) {
           createUser(
             createUserInput: { name: $name, email: $email, password: $password }
@@ -90,11 +89,17 @@ export default {
             email
             name
           }
+          signIn(signInInput: { email: $email, password: $password }) {
+            token
+            user {
+              name
+            }
+          }
         }
       `;
       this.$apollo
         .mutate({
-          mutation: QUERY,
+          mutation: QUERY_SIGN_UP,
           variables: {
             name: name,
             email: email,
@@ -102,8 +107,13 @@ export default {
           },
         })
         .then((data) => {
-          console.log(data);
-          this.name = data["data"]["createUser"]["name"];
+          var sessionToken = data["data"]["signIn"]["token"];
+          var userName = data["data"]["signIn"]["user"]["name"];
+
+          sessionStorage.setItem("sessionToken", sessionToken);
+          sessionStorage.setItem("userName", userName);
+
+          this.$router.push("/");
         })
         .catch((error) => {
           console.error(error);

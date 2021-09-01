@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
 export default {
   name: "Login",
   methods: {
@@ -59,19 +60,37 @@ export default {
       let password = document.getElementById("passwordInput").value;
       this.requestAPI(mail, password);
     },
-    async requestAPI(mail, password) {
-      const APIurl = "";
-      await fetch(APIurl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "applications/json",
-        },
-        body: JSON.stringify({ mail: mail, password: password }),
-      }).then((res) => {
-        console.log(res.status);
-        console.log(res.body);
-      });
-      return;
+    async requestAPI(email, password) {
+      const QUERY_SIGN_IN = gql`
+        mutation ($email: String!, $password: String!) {
+          signIn(signInInput: { email: $email, password: $password }) {
+            token
+            user {
+              name
+            }
+          }
+        }
+      `;
+      this.$apollo
+        .mutate({
+          mutation: QUERY_SIGN_IN,
+          variables: {
+            email: email,
+            password: password,
+          },
+        })
+        .then((data) => {
+          var sessionToken = data["data"]["signIn"]["token"];
+          var userName = data["data"]["signIn"]["user"]["name"];
+
+          sessionStorage.setItem("sessionToken", sessionToken);
+          sessionStorage.setItem("userName", userName);
+
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };

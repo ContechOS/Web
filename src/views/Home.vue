@@ -2,7 +2,8 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
     <h1>Homepage</h1>
-    <p>Welcome, (name)</p>
+    <p v-if="userName">Welcome {{ userName }}</p>
+    <p v-if="!userName">You are not logged in yet</p>
   </div>
 </template>
 
@@ -11,6 +12,12 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Home",
+  data() {
+    return {
+      userName: sessionStorage["userName"],
+      sessionToken: sessionStorage["sessionToken"],
+    };
+  },
   components: {},
 });
 </script>
