@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { ActionTypes } from '@/store/modules/auth/actions.types';
+import { ActionTypes } from "@/store/modules/auth/actions.types";
 
 export default {
   name: "Login",

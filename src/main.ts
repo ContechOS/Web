@@ -10,8 +10,4 @@ const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
 });
 
-createApp(App)
-  .use(store)
-  .use(router)
-  .use(apolloProvider)
-  .mount("#app");
+createApp(App).use(store).use(router).use(apolloProvider).mount("#app");
