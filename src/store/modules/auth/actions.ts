@@ -18,26 +18,48 @@ export interface Actions {
   [ActionTypes.SIGN_IN](
     { commit }: AugmentedActionContext,
     payload: any
-  ): Promise<void>;
+  ): void;
   [ActionTypes.SIGN_UP](
     { commit }: AugmentedActionContext,
     payload: any
-  ): Promise<any>;
+  ): any;
   [ActionTypes.SIGN_OUT](
     { commit }: AugmentedActionContext,
     payload?: undefined
-  ): Promise<any>;
+  ): any;
   [ActionTypes.FETCH_CURRENT_USER](
     { commit }: AugmentedActionContext,
     payload: any
-  ): Promise<void>;
+  ): void;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
   async [ActionTypes.SIGN_IN]({ commit }, payload) {
-    // TODO
+    const { mutate, onDone, onError } = useMutation(gql`
+    mutation ($email: String!, $password: String!) {
+      signIn(signInInput: {
+        email: $email,
+        password: $password
+      }) {
+        user
+        token
+      }
+    }
+    `);
+
+    mutate(payload);
+
+    onDone((result) => {
+      localStorage.setItem("auth.token", result.data.token);
+
+      commit(MutationTypes.SET_USER, result.data.user);
+    });
+
+    onError((result) => {
+      console.log(result);
+    });
   },
-  async [ActionTypes.SIGN_UP]({ commit }, payload) {
+  [ActionTypes.SIGN_UP]({ commit }, payload) {
     const { mutate, onDone, onError } = useMutation(gql`
     mutation ($name: String!, $email: String!, $password: String!) {
       createUser(createUserInput: {
@@ -66,7 +88,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
     onError((result) => {
       console.log(result);
-    })
+    });
   },
   async [ActionTypes.SIGN_OUT]({ commit }, payload) {
     localStorage.clear();
