@@ -61,6 +61,8 @@ export default {
       let password = document.getElementById("passwordInput").value;
 
       this.$store.dispatch(ActionTypes.SIGN_IN, { email, password });
+
+      this.$router.push("/");
     },
   },
 };
