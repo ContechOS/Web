@@ -4,6 +4,8 @@ import { Mutations } from "./mutations";
 import { ActionTypes } from "./actions.types";
 import { MutationTypes } from "./mutations.types";
 import { RootState } from "@/store";
+import { useMutation } from "@vue/apollo-composable";
+import gql from "graphql-tag";
 
 type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
@@ -33,27 +35,36 @@ export interface Actions {
 
 export const actions: ActionTree<State, RootState> & Actions = {
   async [ActionTypes.SIGN_IN]({ commit }, payload) {
-    const response = await fetch("api/tasks");
-    const tasks = await response.json();
-
-    commit(MutationTypes.SET_USER, tasks);
-
-    return tasks;
+    // TODO
   },
   async [ActionTypes.SIGN_UP]({ commit }, payload) {
-    const response = await fetch("api/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
+    const { mutate, onDone, onError } = useMutation(gql`
+    mutation ($name: String!, $email: String!, $password: String!) {
+      createUser(createUserInput: {
+        name: $name,
+        email: $email,
+        password: $password
+      }) {}
+
+      signIn(signInInput: {
+        email: $email,
+        password: $password
+      }) {
+        user
+        token
+      }
+    }
+    `);
+
+    mutate(payload);
+
+    onDone((result) => {
+      commit(MutationTypes.SET_USER, result.data.user);
     });
 
-    if (!response.ok) {
-      return alert("Error creating task");
-    }
-
-    commit(MutationTypes.SET_USER, task);
+    onError((result) => {
+      console.log(result);
+    })
   },
   async [ActionTypes.SIGN_OUT]({ commit }, payload) {
     localStorage.clear();
@@ -62,12 +73,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
     commit(MutationTypes.SET_USER, undefined);
   },
   async [ActionTypes.FETCH_CURRENT_USER]({ commit }, payload) {
-    const response = await fetch(`api/tasks/${task.id}`, { method: "DELETE" });
-
-    if (!response.ok) {
-      return alert("Error deleting task");
-    }
-
-    commit(MutationTypes.SET_USER, task);
+    // TODO
   },
 };
