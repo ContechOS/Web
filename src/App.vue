@@ -9,6 +9,35 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+  var sessionToken = sessionStorage["sessionToken"]
+  // const QUERY_USER = gql`query {
+  //               currentUser() {
+  //                   token
+  //                   user{
+  //                     name
+  //                   }
+  //               }
+  //           }`;
+  //     this.$apollo.query({
+  //         mutation: QUERY_USER,
+  //         headers: {
+  //           authorization: `Bearer ${sessionToken}`
+  //         }
+  //     }).then((data) => {
+  //       var sessionToken = data["data"]["signIn"]["token"]
+  //       var userName = data["data"]["signIn"]["user"]["name"]
+
+  //       sessionStorage.setItem('sessionToken', sessionToken); 
+  //       sessionStorage.setItem('userName', userName); 
+
+  //       window.location.href = "/";
+  //     }).catch((error) => {
+  //       console.error(error)
+  //     })
+}
+
 export default {
   name: "app",
   data() {
@@ -20,7 +49,14 @@ export default {
   methods: {
     logout() {
       sessionStorage.clear()
-      console.log(sessionStorage["username"], sessionStorage["sessionToken"])
+    }
+  },
+  apollo: {
+    user: {
+      query: gql`query {
+        currentUser
+      }`,
+      update: data => data.hello
     }
   }
 };

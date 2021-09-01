@@ -84,7 +84,7 @@ export default {
         sessionStorage.setItem('sessionToken', sessionToken); 
         sessionStorage.setItem('userName', userName); 
 
-        this.$router.push("/");
+        window.location.href = "/";
       }).catch((error) => {
         console.error(error)
       })
